@@ -3,13 +3,17 @@
 
 #define M 5
 
-typedef struct _node {
+typedef struct nodeType {
     int    n; //n < M No. of keys in node will always less than order of B tree
     int    keys[M - 1]; //array of keys
-    struct _node *p[M]; //(n+1 pointers will be in use)
+    struct nodeType *p[M]; //(n+1 pointers will be in use)
 } node;
 
-node *root = NULL;
+//node *root = NULL;
+
+typedef node * Btree;
+//Btree root = NULL;
+
 
 typedef enum KeyStatus {
     Duplicate,
@@ -19,18 +23,22 @@ typedef enum KeyStatus {
     LessKeys,
 } KeyStatus;
 
-int insert(int key);
+void create(Btree* bt);
+int insert(int key, Btree* root);
 void display(node *ptr, int);
-int DelNode(int key);
-void search(int key);
+int DelNode(int key, Btree* root);
+void search(int key, Btree* root);
 KeyStatus ins(node *r, int key, int* y, node** newnode);
 int searchPos(int key, int *key_arr, int n);
-KeyStatus del(node *r, int key);
+KeyStatus del(node *r, int key, Btree* root);
 
 void deleteVal(int siz , int vals[] , int k);
 void sortPrint(int siz , int vals[]);
 
 int main() {
+    Btree root = NULL;
+    create(&root);
+
     int key , vals[100] , sizeTree=0;
     int choice;
     printf("Creation of B tree for M=%d\n", M);
@@ -48,7 +56,7 @@ int main() {
             case 1:
                 printf("\nEnter the key : ");
                 scanf("%d", &key);
-                if(insert(key))
+                if(insert(key, &root))
                 {
                     vals[sizeTree] = key;
                     sizeTree++;
@@ -58,7 +66,7 @@ int main() {
             case 2:
                 printf("\nEnter the key : ");
                 scanf("%d", &key);
-                if(DelNode(key))
+                if(DelNode(key, &root))
                 {
                     deleteVal(sizeTree , vals , key);
                     sizeTree--;
@@ -67,7 +75,7 @@ int main() {
             case 3:
                 printf("\nEnter the key : ");
                 scanf("%d", &key);
-                search(key);
+                search(key, &root);
                 break;
             case 4:
                 printf("\n\nBtree is :\n");
@@ -90,11 +98,15 @@ int main() {
     }/*End of while*/
 }/*End of main()*/
 
-int insert(int key) {
+void create(Btree* bt){
+    *bt = NULL;
+}
+
+int insert(int key, Btree* root) {
     node *newnode;
     int upKey;
     KeyStatus value;
-    value = ins(root, key, &upKey, &newnode);
+    value = ins(*root, key, &upKey, &newnode);
     if (value == Duplicate)
     {
         printf("Key already available\n");
@@ -102,12 +114,12 @@ int insert(int key) {
     }
 
     if (value == InsertIt) {
-        node *uproot = root;
-        root = (node*)malloc(sizeof(node));
-        root->n = 1;
-        root->keys[0] = upKey;
-        root->p[0] = uproot;
-        root->p[1] = newnode;
+        node *uproot = *root;
+        *root = (node*)malloc(sizeof(node));
+        (*root)->n = 1;
+        (*root)->keys[0] = upKey;
+        (*root)->p[0] = uproot;
+        (*root)->p[1] = newnode;
         return 1;
     }/*End of if */
 }/*End of insert()*/
@@ -175,9 +187,9 @@ KeyStatus ins(node *ptr, int key, int *upKey, node **newnode) {
     return InsertIt;
 }/*End of ins()*/
 
-void search(int key) {
+void search(int key, Btree* root) {
     int pos, i, n;
-    node *ptr = root;
+    node *ptr = *root;
     printf("Search path:\n");
     while (ptr) {
         n = ptr->n;
@@ -201,19 +213,19 @@ int searchPos(int key, int *key_arr, int n) {
     return pos;
 }/*End of searchPos()*/
 
-int DelNode(int key) {
+int DelNode(int key, Btree* root) {
     node *uproot;
     KeyStatus value;
     int willBeDel;
-    value = del(root, key);
+    value = del(*root, key, root);
     switch (value) {
         case SearchFailure:
             printf("Key %d is not available\n", key);
             willBeDel = 0;
             break;
         case LessKeys:
-            uproot = root;
-            root = root->p[0];
+            uproot = *root;
+            *root = (*root)->p[0];
             free(uproot);
             willBeDel =1;
             break;
@@ -224,7 +236,7 @@ int DelNode(int key) {
     return willBeDel;
 }/*End of delnode()*/
 
-KeyStatus del(node *ptr, int key) {
+KeyStatus del(node *ptr, int key, Btree* root) {
     int pos, i, pivot, n, min;
     int *key_arr;
     KeyStatus value;
@@ -250,7 +262,7 @@ KeyStatus del(node *ptr, int key) {
             key_arr[i - 1] = key_arr[i];
             p[i] = p[i + 1];
         }
-        return --ptr->n >= (ptr == root ? 1 : min) ? Success : LessKeys;
+        return --ptr->n >= (ptr == *root ? 1 : min) ? Success : LessKeys;
     }/*End of if */
 
     //if found key but p is not a leaf
@@ -267,7 +279,7 @@ KeyStatus del(node *ptr, int key) {
         key_arr[pos] = qp->keys[nkey - 1];
         qp->keys[nkey - 1] = key;
     }/*End of if */
-    value = del(p[pos], key);
+    value = del(p[pos], key, root);
     if (value != LessKeys)
         return value;
 
@@ -326,7 +338,7 @@ KeyStatus del(node *ptr, int key) {
         key_arr[i - 1] = key_arr[i];
         p[i] = p[i + 1];
     }
-    return --ptr->n >= (ptr == root ? 1 : min) ? Success : LessKeys;
+    return --ptr->n >= (ptr == *root ? 1 : min) ? Success : LessKeys;
 }/*End of del()*/
 
 
