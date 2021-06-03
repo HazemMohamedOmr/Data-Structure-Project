@@ -6,9 +6,11 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/Hazem/CLionProjects/BTree/BTree.h
+
 C:/Users/Hazem/CLionProjects/BTree/main.c
 stdio.h
 C:/Users/Hazem/CLionProjects/BTree/stdio.h
-stdlib.h
-C:/Users/Hazem/CLionProjects/BTree/stdlib.h
+BTree.h
+C:/Users/Hazem/CLionProjects/BTree/BTree.h
 

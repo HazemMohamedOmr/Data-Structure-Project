@@ -10,8 +10,6 @@
     5- KeyStatus ins(node *r, int x, int* y, node** u);
     6- int searchPos(int x, int *key_arr, int n);
     7- KeyStatus del(node *r, int x);
-    8- void eatline(void);
-    9- void inorder(node *ptr);
     10- void deleteVal(int siz , int vals[] , int k);
     11- void sortPrint(int siz , int vals[]);
 
