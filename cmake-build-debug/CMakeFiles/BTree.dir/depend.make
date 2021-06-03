@@ -4,5 +4,6 @@
 CMakeFiles/BTree.dir/BTree.c.obj: ../BTree.c
 CMakeFiles/BTree.dir/BTree.c.obj: ../BTree.h
 
+CMakeFiles/BTree.dir/main.c.obj: ../BTree.h
 CMakeFiles/BTree.dir/main.c.obj: ../main.c
 

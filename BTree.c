@@ -106,7 +106,7 @@ void search(int key, Btree* root) {
         printf("\n");
         pos = searchPos(key, ptr->keys, n);
         if (pos < n && key == ptr->keys[pos]) {
-            printf("Key %d found in position %d of last dispalyed node\n", key, i);
+            printf("Key %d found\n", key);
             return;
         }
         ptr = ptr->p[pos];
@@ -252,7 +252,7 @@ KeyStatus del(node *ptr, int key, Btree* root) {
 
 void deleteVal(int siz , int vals[] , int k)
 {
-    int pos;
+    int pos = 0;
     for(int i=0 ; i<siz ; i++)
     {
         if(vals[i] == k)
@@ -290,15 +290,43 @@ void display(node *ptr, int blanks) {
         int i;
         for (i = 1; i <= blanks; i++)
             printf(" ");
-        for (i = 0; i < ptr->n; i++)
-            printf("%d ", ptr->keys[i]);
-        if(1)
-        {
-            printf("\n");
+
+        for (int j = 0; j < 16; ++j){
+            if(j == 0){
+                printf(" ");
+                continue;
+            }
+            printf("-");
         }
-        else
-            printf("\t");
+
+
+        printf("\n");
+        for (i = 1; i <= blanks; i++)
+            printf(" ");
+        printf("|");
+
+        for (i = 0; i < ptr->n; i++)
+            printf(" %d |", ptr->keys[i]);
+        for (i = 0; i < (M-1)-ptr->n; i++)
+            printf("   |");
+
+        printf("\n");
+        for (i = 1; i <= blanks; i++)
+            printf(" ");
+        for (int j = 0; j < 16; ++j){
+            if(j == 0){
+                printf(" ");
+                continue;
+            }
+            printf("-");
+        }
+
+        printf("\n");
+        if(ptr->p[0])
+            printf("\n");
+
+
         for (i = 0; i <= ptr->n; i++)
-            display(ptr->p[i], blanks + 10);
+            display(ptr->p[i], blanks + 4);
     }/*End of if*/
 }
