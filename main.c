@@ -45,7 +45,7 @@ int main() {
                 break;
             case 4:
                 printf("\n\nBtree is :\n");
-                display(root, 0);
+                display(&root, 0);
                 printf("\n\n");
                 break;
             case 5:
