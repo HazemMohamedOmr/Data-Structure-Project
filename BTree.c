@@ -30,6 +30,7 @@ int insert(int key, Btree* root) {
         (*root)->p[1] = newnode;
         return 1;
     }/*End of if */
+    return 1;
 }/*End of insert()*/
 
 KeyStatus ins(node *ptr, int key, int *upKey, node **newnode) {
@@ -138,7 +139,7 @@ int DelNode(int key, Btree* root) {
             willBeDel =1;
             break;
         default:
-            willBeDel = 0;
+            willBeDel = 1;
             break;
     }/*End of switch*/
     return willBeDel;
@@ -285,8 +286,8 @@ void sortPrint(int siz , int vals[])
     }
 }
 
-void display(node *ptr, int blanks) {
-    if (ptr) {
+void display(Btree* ptr, int blanks) {
+    if (*ptr) {
         int i;
         for (i = 1; i <= blanks; i++)
             printf(" ");
@@ -305,9 +306,9 @@ void display(node *ptr, int blanks) {
             printf(" ");
         printf("|");
 
-        for (i = 0; i < ptr->n; i++)
-            printf(" %d |", ptr->keys[i]);
-        for (i = 0; i < (M-1)-ptr->n; i++)
+        for (i = 0; i < (*ptr)->n; i++)
+            printf(" %d |", (*ptr)->keys[i]);
+        for (i = 0; i < (M-1)-(*ptr)->n; i++)
             printf("   |");
 
         printf("\n");
@@ -322,11 +323,11 @@ void display(node *ptr, int blanks) {
         }
 
         printf("\n");
-        if(ptr->p[0])
+        if((*ptr)->p[0])
             printf("\n");
 
 
-        for (i = 0; i <= ptr->n; i++)
-            display(ptr->p[i], blanks + 4);
+        for (i = 0; i <= (*ptr)->n; i++)
+            display(&(*ptr)->p[i], blanks + 4);
     }/*End of if*/
 }

@@ -25,7 +25,7 @@ typedef enum KeyStatus {
 
 void create(Btree* bt);
 int insert(int key, Btree* root);
-void display(node *ptr, int);
+void display(Btree* ptr, int);
 int DelNode(int key, Btree* root);
 void search(int key, Btree* root);
 KeyStatus ins(node *r, int key, int* y, node** newnode);
